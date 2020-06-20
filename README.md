@@ -1,2 +1,2 @@
 # Scripts
-M365 Defender Scripts
+M365 MDATP Scripts
