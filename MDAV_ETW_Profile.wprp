@@ -51,7 +51,7 @@
     <EventProvider Id="EventProvider_8e92deef-5e17-413b-b927-59b2f06a3cfc" Name="8e92deef-5e17-413b-b927-59b2f06a3cfc" />
     <EventProvider Id="EventProvider_751ef305-6c6e-4fed-b847-02ef79d26aef" Name="751ef305-6c6e-4fed-b847-02ef79d26aef" />
     <EventProvider Id="EventProvider_0A002690-3839-4E3A-B3B6-96D8DF868D99" Name="0A002690-3839-4E3A-B3B6-96D8DF868D99" />
-    <Profile Id="WDAV_SCEP_Performance.Verbose.File" Name="WDAV_SCEP_Performance" Description="WDAV_SCEP_Performance" LoggingMode="File" DetailLevel="Verbose">
+    <Profile Id="MDAV_ETW_Profiling.Verbose.File" Name="MDAV_ETW_Profiling" Description="MDAV_ETW_Profiling" LoggingMode="File" DetailLevel="Verbose">
       <Collectors>
         <SystemCollectorId Value="SystemCollector">
           <SystemProviderId Value="SystemProvider" />
@@ -67,6 +67,6 @@
         </EventCollectorId>
       </Collectors>
     </Profile>
-    <Profile Id="WDAV_SCEP_Performance.Verbose.Memory" Name="WDAV_SCEP_Performance" Description="WDAV_SCEP_Performance" Base="WDAV_SCEP_Performance.Verbose.File" LoggingMode="Memory" DetailLevel="Verbose" />
+    <Profile Id="MDAV_ETW_Profiling.Verbose.Memory" Name="MDAV_ETW_Profiling" Description="MDAV_ETW_Profiling" Base="MDAV_ETW_Profiling.Verbose.File" LoggingMode="Memory" DetailLevel="Verbose" />
   </Profiles>
 </WindowsPerformanceRecorder>
