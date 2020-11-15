@@ -2,7 +2,7 @@
 
 <WindowsPerformanceRecorder
     Author="Yong Rhee"
-    Comments="To capture ETW profile related issues in MDAV (formerly WDAV and before then SCEP)"
+    Comments="To capture ETW profiles when troubleshooting MDAV (formerly WDAV and before then SCEP) related issues"
     Company="Microsoft Corporation"
     Copyright="Microsoft Corporation"
     Tag="Created"
