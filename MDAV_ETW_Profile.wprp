@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<WindowsPerformanceRecorder
+    Author="Yong Rhee"
+    Comments="To capture Performance related issues in WDAV and SCEP"
+    Company="Microsoft Corporation"
+    Copyright="Microsoft Corporation"
+    Tag="Created"
+    Team="Microsoft Services"
+    Version="1.0"
+    >
+
+  <Profiles>
+    <SystemCollector Id="SystemCollector" Name="NT Kernel Logger">
+      <BufferSize Value="1024" />
+      <Buffers Value="320" />
+    </SystemCollector>
+    <EventCollector Id="EventCollector_AMXperf" Name="AMXperf">
+      <BufferSize Value="64" />
+      <Buffers Value="320" />
+    </EventCollector>
+    <SystemProvider Id="SystemProvider">
+      <Keywords>
+        <Keyword Value="CompactCSwitch" />
+        <Keyword Value="CSwitch" />
+        <Keyword Value="DiskIO" />
+        <Keyword Value="DPC" />
+        <Keyword Value="FileIO" />
+        <Keyword Value="FileIOInit" />
+        <Keyword Value="HardFaults" />
+        <Keyword Value="Interrupt" />
+        <Keyword Value="Loader" />
+        <Keyword Value="MemoryInfo" />
+        <Keyword Value="MemoryInfoWS" />
+        <Keyword Value="ProcessCounter" />
+        <Keyword Value="ProcessThread" />
+        <Keyword Value="ReadyThread" />
+        <Keyword Value="Registry" />
+        <Keyword Value="SampledProfile" />
+      </Keywords>
+      <Stacks>
+        <Stack Value="SampledProfile" />
+        <Stack Value="CSwitch" />
+        <Stack Value="ReadyThread" />
+        <Stack Value="FileCreate" />
+        <Stack Value="FileClose" />
+      </Stacks>
+    </SystemProvider>
+    <EventProvider Id="EventProvider_e4b70372-261f-4c54-8fa6-a5a7914d73da" Name="e4b70372-261f-4c54-8fa6-a5a7914d73da" />
+    <EventProvider Id="EventProvider_cfeb0608-330e-4410-b00d-56d8da9986e6" Name="cfeb0608-330e-4410-b00d-56d8da9986e6" />
+    <EventProvider Id="EventProvider_8e92deef-5e17-413b-b927-59b2f06a3cfc" Name="8e92deef-5e17-413b-b927-59b2f06a3cfc" />
+    <EventProvider Id="EventProvider_751ef305-6c6e-4fed-b847-02ef79d26aef" Name="751ef305-6c6e-4fed-b847-02ef79d26aef" />
+    <EventProvider Id="EventProvider_0A002690-3839-4E3A-B3B6-96D8DF868D99" Name="0A002690-3839-4E3A-B3B6-96D8DF868D99" />
+    <Profile Id="WDAV_SCEP_Performance.Verbose.File" Name="WDAV_SCEP_Performance" Description="WDAV_SCEP_Performance" LoggingMode="File" DetailLevel="Verbose">
+      <Collectors>
+        <SystemCollectorId Value="SystemCollector">
+          <SystemProviderId Value="SystemProvider" />
+        </SystemCollectorId>
+        <EventCollectorId Value="EventCollector_AMXperf">
+          <EventProviders>
+            <EventProviderId Value="EventProvider_e4b70372-261f-4c54-8fa6-a5a7914d73da" />
+            <EventProviderId Value="EventProvider_cfeb0608-330e-4410-b00d-56d8da9986e6" />
+            <EventProviderId Value="EventProvider_8e92deef-5e17-413b-b927-59b2f06a3cfc" />
+            <EventProviderId Value="EventProvider_751ef305-6c6e-4fed-b847-02ef79d26aef" />
+            <EventProviderId Value="EventProvider_0A002690-3839-4E3A-B3B6-96D8DF868D99" />
+          </EventProviders>
+        </EventCollectorId>
+      </Collectors>
+    </Profile>
+    <Profile Id="WDAV_SCEP_Performance.Verbose.Memory" Name="WDAV_SCEP_Performance" Description="WDAV_SCEP_Performance" Base="WDAV_SCEP_Performance.Verbose.File" LoggingMode="Memory" DetailLevel="Verbose" />
+  </Profiles>
+</WindowsPerformanceRecorder>
