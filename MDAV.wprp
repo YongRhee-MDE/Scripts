@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" standalone='yes'?>
+
+<WindowsPerformanceRecorder Version="1.0" Author="Microsoft Defender for Endpoint" Team="Microsoft Defender for Endpoint" Comments="Microsoft Defender for Endpoint performance tracing" Company="Microsoft Corporation" Copyright="Microsoft Corporation" Tag="FAS">
+    <Profiles>
+        <!-- System Providers -->
+
+        <SystemProvider Id="SystemProvider_WD_Light">
+            <Keywords>
+                <Keyword Value="CpuConfig" />
+                <Keyword Value="Loader" />
+                <Keyword Value="ProcessThread" />
+                <Keyword Value="HardFaults" />
+                <Keyword Value="DiskIO" />
+                <Keyword Value="CSwitch" />
+                <Keyword Value="ProcessCounter" />
+            </Keywords>
+        </SystemProvider>
+
+        <SystemProvider Id="SystemProvider_WD_Verbose" Base="SystemProvider_WD_Light">
+            <Keywords Operation="Add">
+                <Keyword Value="ReadyThread" />
+                <Keyword Value="FileIO" />
+                <Keyword Value="FileIOInit" />
+                <Keyword Value="SampledProfile" />
+                <Keyword Value="MemoryInfo" />
+                <Keyword Value="MemoryInfoWS" />
+                <Keyword Value="Interrupt" />
+                <Keyword Value="DPC" />
+                <Keyword Value="WDFInterrupt" />
+                <Keyword Value="WDFDPC" />
+                <Keyword Value="Registry" />
+                <!-- Additional keywords that enhance Wait Analysis -->
+                <Keyword Value="KernelQueue" />
+                <Keyword Value="SynchronizationObjects" />
+            </Keywords>
+            <Stacks>
+                <Stack Value="SampledProfile"/>
+                <Stack Value="CSwitch"/>
+                <Stack Value="ReadyThread"/>
+                <Stack Value="FileCreate"/>
+                <Stack Value="FileClose"/>
+                <Stack Value="ThreadDCEnd" />
+                <!-- Additional stacks that enhance Wait Analysis -->
+                <Stack Value="ThreadCreate" />
+                <Stack Value="ThreadPoolCallbackStart" />
+                <Stack Value="ThreadPoolCallbackEnqueue" />
+                <Stack Value="ThreadPoolCallbackDequeue" />
+                <Stack Value="ThreadPoolCallbackStop" />
+                <Stack Value="KernelQueueEnqueue" />
+                <Stack Value="KernelQueueDequeue" />
+            </Stacks>
+        </SystemProvider>
+
+        <!-- Responsiveness Providers -->
+
+        <EventProvider Id="EventProvider_DWMWin32k" Base="" Name="e7ef96be-969f-414f-97d7-3ddb7b558ccc" NonPagedMemory="true">
+            <Keywords>
+              <Keyword Value="0x2000"/>
+            </Keywords>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_DWMWin32k_CaptureState" Base="" Name="e7ef96be-969f-414f-97d7-3ddb7b558ccc" NonPagedMemory="true" CaptureStateOnly="true">
+            <CaptureStateOnSave>
+                <Keyword Value="0x80000"/>
+            </CaptureStateOnSave>
+        </EventProvider>
+ 
+        <EventProvider Id="EventProvider_Microsoft-Windows-Win32k_Focus" Name="Microsoft-Windows-Win32k" NonPagedMemory="true">
+            <Keywords>
+                <Keyword Value="0x00002000"/> <!-- Focus -->
+            </Keywords>
+        </EventProvider>
+        
+        <EventProvider Id="EventProvider_Microsoft-Windows-Win32k_CaptureState" Name="Microsoft-Windows-Win32k" NonPagedMemory="true" CaptureStateOnly="true">
+            <CaptureStateOnSave>
+              <Keyword Value="0x00080000"/> <!-- ThreadRundown -->
+            </CaptureStateOnSave>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_Microsoft-Windows-COMRuntime" Name="Microsoft-Windows-COMRuntime">
+            <Keywords>
+                <Keyword Value="0x00000001"/> <!-- CliModalLoop -->
+                <Keyword Value="0x00000002"/> <!-- ComCallWaitAnalysis -->
+            </Keywords>
+        </EventProvider>
+
+        <!-- Microsoft Defender for Endpoint providers -->
+        <EventProvider Id="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" /> <!-- Microsoft-Antimalware-Engine: keep guid as name is not registered on all machines -->
+        <EventProvider Id="EventProvider_AM_Engine_With_Stacks" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" Stack="true"/>
+        <EventProvider Id="EventProvider_AM_Service" Name="Microsoft-Antimalware-Service" />
+        <EventProvider Id="EventProvider_AM_RTP" Name="Microsoft-Antimalware-RTP" />
+        <EventProvider Id="EventProvider_AM_Filter" Name="Microsoft-Antimalware-AMFilter" />
+        <EventProvider Id="EventProvider_AM_Filter_With_Stacks" Name="Microsoft-Antimalware-AMFilter" Stack="true" />
+        <EventProvider Id="EventProvider_AM_Protection" Name="Microsoft-Antimalware-Protection" />
+
+        <!-- manifested Process lifetime provider -->
+        <EventProvider Id="EventProvider_Windows_Kernel_Process" Name="Microsoft-Windows-Kernel-Process" />
+
+        <!-- AXE provider -->
+        <EventProvider Id="EventProvider_Windows_AssessmentExecutionEngine" Name="Microsoft-Windows-AssessmentExecutionEngine"/>
+
+        <!-- Network Providers -->
+        <EventProvider Id="EventProvider_Microsoft_Windows_NCSI" Name="Microsoft-Windows-NCSI" />
+
+        <EventProvider Id="EventProvider_Microsoft_Windows_WLAN_AutoConfig" Name="Microsoft-Windows-WLAN-AutoConfig">
+            <Keywords>
+                <Keyword Value="0x200" /> <!-- WlanConnect -->
+            </Keywords>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_Microsoft_Windows_TCPIP" Name="Microsoft-Windows-TCPIP">
+            <Keywords>
+                <Keyword Value="0x80" /> <!--TcpipDiagnosis -->
+            </Keywords>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_Microsoft_Windows_WinINet" Name="Microsoft-Windows-WinINet">
+            <Keywords>
+                <Keyword Value="0x00000000" />
+            </Keywords>
+        </EventProvider>
+
+        <!-- SMB -->
+        <EventProvider Id="EventProvider_Microsoft_Windows_SMBClient" Name="Microsoft-Windows-SMBClient">
+            <Keywords>
+                <Keyword Value="0x001" /> <!-- Smb_Perf -->
+                <Keyword Value="0x002" /> <!-- Networking_Perf -->
+                <Keyword Value="0x004" /> <!-- Smb_Info -->
+                <Keyword Value="0x008" /> <!-- InfoCache_Info -->
+                <Keyword Value="0x010" /> <!-- Smb_TFO -->
+                <Keyword Value="0x020" /> <!-- Smb_MultiChannel -->
+                <Keyword Value="0x040" /> <!-- Smb_Connectivity -->
+                <Keyword Value="0x080" /> <!-- Smb_Authentication -->
+                <Keyword Value="0x100" /> <!-- Smb_Authorization -->
+                <Keyword Value="0x200" /> <!-- Smb_Security -->
+            </Keywords>
+        </EventProvider>
+
+        <!-- Additional providers that enhance Wait Analysis -->
+        <EventProvider Id="EventProvider_ThreadPool" Name="c861d0e2-a2c1-4d36-9f9c-970bab943a12"/>
+        <EventProvider Id="EventProvider_Microsoft-Windows-RPC" Name="Microsoft-Windows-RPC" Level="4" Stack="true"/>
+        <EventProvider Id="EventProvider_Microsoft-Windows-RPCSS" Name="Microsoft-Windows-RPCSS" Level="4" Stack="true"/>
+        <EventProvider Id="EventProvider_Microsoft-Windows-Networking-Correlation" Name="Microsoft-Windows-Networking-Correlation"/>
+        <EventProvider Id="EventProviderClass_PerfTrack" Name="PerfTrack" Level="4" NonPagedMemory="true"/>
+        <EventProvider Id="EventProvider_Microsoft-Windows-Win32k_MessagePump" Name="Microsoft-Windows-Win32k" Stack="true">
+            <Keywords>
+                <Keyword Value="0x400000"/>
+            </Keywords>
+        </EventProvider>
+
+        <!-- Profiles -->
+        <Profile Id="WD.Light.File" Base="BaseProfile.Light" LoggingMode="File" Name="WD" DetailLevel="Light" Description="Microsoft Defender for Endpoint analysis">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInFile">
+                    <SystemProviderId Value="SystemProvider_WD_Light" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInFile">
+                    <EventProviders Operation="Add">
+                        <EventProviderId Value="EventProvider_AM_Engine" />
+                        <EventProviderId Value="EventProvider_AM_Service" />
+                        <EventProviderId Value="EventProvider_AM_RTP" />
+                        <EventProviderId Value="EventProvider_AM_Filter" />
+                        <EventProviderId Value="EventProvider_AM_Protection" />
+                        <EventProviderId Value="EventProvider_DWMWin32k" />
+                        <EventProviderId Value="EventProvider_DWMWin32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_Focus" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Windows_Kernel_Process" />
+
+                        <EventProviderId Value="EventProvider_Windows_AssessmentExecutionEngine" />
+
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
+                    </EventProviders>
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WD.Light.Memory" Base="BaseProfile.Light" LoggingMode="Memory" Name="WD" DetailLevel="Light" Description="Microsoft Defender for Endpoint analysis">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInMemory">
+                    <SystemProviderId Value="SystemProvider_WD_Light" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryMedium">
+                    <EventProviders Operation="Add">
+                        <EventProviderId Value="EventProvider_AM_Engine" />
+                        <EventProviderId Value="EventProvider_AM_Service" />
+                        <EventProviderId Value="EventProvider_AM_RTP" />
+                        <EventProviderId Value="EventProvider_AM_Filter" />
+                        <EventProviderId Value="EventProvider_AM_Protection" />
+                        <EventProviderId Value="EventProvider_DWMWin32k" />
+                        <EventProviderId Value="EventProvider_DWMWin32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_Focus" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Windows_Kernel_Process" />
+
+                        <EventProviderId Value="EventProvider_Windows_AssessmentExecutionEngine" />
+
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
+                    </EventProviders>
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WD.Verbose.File" Base="BaseProfile.Light" LoggingMode="File" Name="WD" DetailLevel="Verbose" Description="Microsoft Defender for Endpoint analysis">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInFileLarge">
+                    <SystemProviderId Value="SystemProvider_WD_Verbose" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInFileLarge">
+                    <EventProviders Operation="Add">
+                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Service" />
+                        <EventProviderId Value="EventProvider_AM_RTP" />
+                        <EventProviderId Value="EventProvider_AM_Filter_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Protection" />
+                        <EventProviderId Value="EventProvider_DWMWin32k" />
+                        <EventProviderId Value="EventProvider_DWMWin32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_Focus" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-COMRuntime" />
+                        <EventProviderId Value="EventProvider_Windows_Kernel_Process" />
+
+                        <EventProviderId Value="EventProvider_Windows_AssessmentExecutionEngine" />
+
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
+
+                        <!-- Additional providers that enhance Wait Analysis -->
+                        <EventProviderId Value="EventProvider_ThreadPool" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-RPC" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-RPCSS" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Networking-Correlation" />
+                        <EventProviderId Value="EventProviderClass_PerfTrack" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_MessagePump" />
+
+                        <!-- SMB -->
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_SMBClient" />
+                    </EventProviders>
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WD.Verbose.Memory" Base="BaseProfile.Light" LoggingMode="Memory" Name="WD" DetailLevel="Verbose" Description="Microsoft Defender for Endpoint analysis">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInMemory">
+                    <SystemProviderId Value="SystemProvider_WD_Verbose" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryLarge">
+                    <EventProviders Operation="Add">
+                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Service" />
+                        <EventProviderId Value="EventProvider_AM_RTP" />
+                        <EventProviderId Value="EventProvider_AM_Filter_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Protection" />
+                        <EventProviderId Value="EventProvider_DWMWin32k" />
+                        <EventProviderId Value="EventProvider_DWMWin32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_Focus" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_CaptureState" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-COMRuntime" />
+                        <EventProviderId Value="EventProvider_Windows_Kernel_Process" />
+
+                        <EventProviderId Value="EventProvider_Windows_AssessmentExecutionEngine" />
+
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
+
+                        <!-- Additional providers that enhance Wait Analysis -->
+                        <EventProviderId Value="EventProvider_ThreadPool" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-RPC" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-RPCSS" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Networking-Correlation" />
+                        <EventProviderId Value="EventProviderClass_PerfTrack" />
+                        <EventProviderId Value="EventProvider_Microsoft-Windows-Win32k_MessagePump" />
+
+                        <!-- SMB -->
+                        <EventProviderId Value="EventProvider_Microsoft_Windows_SMBClient" />
+                    </EventProviders>
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WDForLargeServers.Light.File" Base="WD.Light.File" LoggingMode="File" Name="WDForLargeServers" DetailLevel="Light" Description="Microsoft Defender for Endpoint analysis for large servers">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInFile">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="256" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInFile">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="128" />
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WDForLargeServers.Light.Memory" Base="WD.Light.Memory" LoggingMode="Memory" Name="WDForLargeServers" DetailLevel="Light" Description="Microsoft Defender for Endpoint analysis for large servers">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInMemory">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="1024" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryMedium">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="512" />
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WDForLargeServers.Verbose.File" Base="WD.Verbose.File" LoggingMode="File" Name="WDForLargeServers" DetailLevel="Verbose" Description="Microsoft Defender for Endpoint analysis for large servers">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInFileLarge">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="512" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInFileLarge">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="256" />
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+
+        <Profile Id="WDForLargeServers.Verbose.Memory" Base="WD.Verbose.Memory" LoggingMode="Memory" Name="WDForLargeServers" DetailLevel="Verbose" Description="Microsoft Defender for Endpoint analysis for large servers">
+            <Collectors Operation="Add">
+                <SystemCollectorId Value="SystemCollector_WPRSystemCollectorInMemory">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="2048" />
+                </SystemCollectorId>
+                <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryLarge">
+                    <BufferSize Value="1024" />
+                    <Buffers Value="1024" />
+                </EventCollectorId>
+            </Collectors>
+        </Profile>
+    </Profiles>
+
+    <TraceMergeProperties>
+        <TraceMergeProperty  Id="Default" Name="Default" Base="">
+            <DeletePreMergedTraceFiles Value="true"/>
+            <FileCompression Value="true"/>
+            <CustomEvents>
+                <CustomEvent Value="ImageId"/>
+                <CustomEvent Value="BuildInfo"/>
+                <CustomEvent Value="VolumeMapping"/>
+                <CustomEvent Value="EventMetadata"/>
+                <CustomEvent Value="WinSAT"/>
+                <CustomEvent Value="NetworkInterface"/>
+            </CustomEvents>
+        </TraceMergeProperty>
+    </TraceMergeProperties>
+
+</WindowsPerformanceRecorder>
