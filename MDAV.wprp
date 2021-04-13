@@ -114,12 +114,6 @@
             </Keywords>
         </EventProvider>
 
-        <EventProvider Id="EventProvider_Microsoft_Windows_WinINet" Name="Microsoft-Windows-WinINet">
-            <Keywords>
-                <Keyword Value="0x00000000" />
-            </Keywords>
-        </EventProvider>
-
         <!-- SMB -->
         <EventProvider Id="EventProvider_Microsoft_Windows_SMBClient" Name="Microsoft-Windows-SMBClient">
             <Keywords>
@@ -172,7 +166,6 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
-                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
@@ -201,7 +194,6 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
-                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
@@ -231,7 +223,6 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
-                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
 
                         <!-- Additional providers that enhance Wait Analysis -->
                         <EventProviderId Value="EventProvider_ThreadPool" />
@@ -272,7 +263,6 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
-                        <EventProviderId Value="EventProvider_Microsoft_Windows_WinINet" />
 
                         <!-- Additional providers that enhance Wait Analysis -->
                         <EventProviderId Value="EventProvider_ThreadPool" />
