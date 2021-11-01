@@ -64,13 +64,13 @@
                 <Keyword Value="0x80000"/>
             </CaptureStateOnSave>
         </EventProvider>
- 
+
         <EventProvider Id="EventProvider_Microsoft-Windows-Win32k_Focus" Name="Microsoft-Windows-Win32k" NonPagedMemory="true">
             <Keywords>
                 <Keyword Value="0x00002000"/> <!-- Focus -->
             </Keywords>
         </EventProvider>
-        
+
         <EventProvider Id="EventProvider_Microsoft-Windows-Win32k_CaptureState" Name="Microsoft-Windows-Win32k" NonPagedMemory="true" CaptureStateOnly="true">
             <CaptureStateOnSave>
               <Keyword Value="0x00080000"/> <!-- ThreadRundown -->
@@ -85,13 +85,55 @@
         </EventProvider>
 
         <!-- Microsoft Defender for Endpoint providers -->
-        <EventProvider Id="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" /> <!-- Microsoft-Antimalware-Engine: keep guid as name is not registered on all machines -->
-        <EventProvider Id="EventProvider_AM_Engine_With_Stacks" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" Stack="true"/>
+        <!-- Microsoft-Antimalware-Engine: keep guid as name is not registered on all machines -->
+        <EventProvider Id="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99">
+            <Keywords>
+                <Keyword Value="0x00000000FFFFFFFF" /> <!-- exclude capture state and reserved keywords from runtime keywords -->
+            </Keywords>
+        </EventProvider>
+        <EventProvider Id="EventProvider_AM_Engine_With_StartRundown" Base="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99">
+            <CaptureStateOnStart>
+                <Keyword Value="0x0000040000000000" /> <!-- StartRundown -->
+            </CaptureStateOnStart>
+        </EventProvider>
+        <EventProvider Id="EventProvider_AM_Engine_With_EndRundown" Base="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99">
+            <CaptureStateOnSave>
+                <Keyword Value="0x0000080000000000" /> <!-- EndRundown -->
+            </CaptureStateOnSave>
+        </EventProvider>
+        <EventProvider Id="EventProvider_AM_Engine_With_Stacks" Base="EventProvider_AM_Engine" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" Stack="true"/>
+        <EventProvider Id="EventProvider_AM_Engine_With_Stacks_StartRundown" Base="EventProvider_AM_Engine_With_StartRundown" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" Stack="true"/>
+        <EventProvider Id="EventProvider_AM_Engine_With_Stacks_EndRundown" Base="EventProvider_AM_Engine_With_EndRundown" Name="0a002690-3839-4e3a-b3b6-96d8df868d99" Stack="true"/>
+        <!-- Platform providers -->
         <EventProvider Id="EventProvider_AM_Service" Name="Microsoft-Antimalware-Service" />
         <EventProvider Id="EventProvider_AM_RTP" Name="Microsoft-Antimalware-RTP" />
         <EventProvider Id="EventProvider_AM_Filter" Name="Microsoft-Antimalware-AMFilter" />
         <EventProvider Id="EventProvider_AM_Filter_With_Stacks" Name="Microsoft-Antimalware-AMFilter" Stack="true" />
         <EventProvider Id="EventProvider_AM_Protection" Name="Microsoft-Antimalware-Protection" />
+
+        <!-- Microsoft-Antimalware-Engine-DynamicSymbols & Microsoft-Antimalware-Engine-DynamicSymbolsRundown -->
+        <EventProvider Id="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbols" Name="e00ad681-35f9-4afc-950d-7ba36eefcfa5" Level="5"> <!-- Level 5: Verbose -->
+            <Keywords>
+                <Keyword Value="0x08"/> <!-- Loader: Module events -->
+                <Keyword Value="0x10"/> <!-- JIT: Method events -->
+            </Keywords>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_StartRundown" Name="12137356-423b-4351-87d1-b6178dc73328" Level="5" CaptureStateOnly="true">
+            <CaptureStateOnStart>
+                <Keyword Value="0x08"/> <!-- Loader: Module events -->
+                <Keyword Value="0x10"/> <!-- JIT: Method events -->
+                <Keyword Value="0x40"/> <!-- Start Rundown -->
+            </CaptureStateOnStart>
+        </EventProvider>
+
+        <EventProvider Id="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_EndRundown" Name="12137356-423b-4351-87d1-b6178dc73328" Level="5" CaptureStateOnly="true">
+            <CaptureStateOnSave>
+                <Keyword Value="0x08"/> <!-- Loader: Module events -->
+                <Keyword Value="0x10"/> <!-- JIT: Method events -->
+                <Keyword Value="0x100"/> <!-- End Rundown -->
+            </CaptureStateOnSave>
+        </EventProvider>
 
         <!-- manifested Process lifetime provider -->
         <EventProvider Id="EventProvider_Windows_Kernel_Process" Name="Microsoft-Windows-Kernel-Process" />
@@ -150,7 +192,7 @@
                 </SystemCollectorId>
                 <EventCollectorId Value="EventCollector_WPREventCollectorInFile">
                     <EventProviders Operation="Add">
-                        <EventProviderId Value="EventProvider_AM_Engine" />
+                        <EventProviderId Value="EventProvider_AM_Engine_With_StartRundown" />
                         <EventProviderId Value="EventProvider_AM_Service" />
                         <EventProviderId Value="EventProvider_AM_RTP" />
                         <EventProviderId Value="EventProvider_AM_Filter" />
@@ -166,6 +208,10 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+
+                        <!-- Microsoft-Antimalware-Engine-DynamicSymbols & Microsoft-Antimalware-Engine-DynamicSymbolsRundown -->
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbols" />
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_StartRundown" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
@@ -178,7 +224,7 @@
                 </SystemCollectorId>
                 <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryMedium">
                     <EventProviders Operation="Add">
-                        <EventProviderId Value="EventProvider_AM_Engine" />
+                        <EventProviderId Value="EventProvider_AM_Engine_With_EndRundown" />
                         <EventProviderId Value="EventProvider_AM_Service" />
                         <EventProviderId Value="EventProvider_AM_RTP" />
                         <EventProviderId Value="EventProvider_AM_Filter" />
@@ -194,6 +240,10 @@
                         <EventProviderId Value="EventProvider_Microsoft_Windows_NCSI" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_WLAN_AutoConfig" />
                         <EventProviderId Value="EventProvider_Microsoft_Windows_TCPIP" />
+
+                        <!-- Microsoft-Antimalware-Engine-DynamicSymbols & Microsoft-Antimalware-Engine-DynamicSymbolsRundown -->
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbols" />
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_EndRundown" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
@@ -206,7 +256,7 @@
                 </SystemCollectorId>
                 <EventCollectorId Value="EventCollector_WPREventCollectorInFileLarge">
                     <EventProviders Operation="Add">
-                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks_StartRundown" />
                         <EventProviderId Value="EventProvider_AM_Service" />
                         <EventProviderId Value="EventProvider_AM_RTP" />
                         <EventProviderId Value="EventProvider_AM_Filter_With_Stacks" />
@@ -234,6 +284,10 @@
 
                         <!-- SMB -->
                         <EventProviderId Value="EventProvider_Microsoft_Windows_SMBClient" />
+
+                        <!-- Microsoft-Antimalware-Engine-DynamicSymbols & Microsoft-Antimalware-Engine-DynamicSymbolsRundown -->
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbols" />
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_StartRundown" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
@@ -246,7 +300,7 @@
                 </SystemCollectorId>
                 <EventCollectorId Value="EventCollector_WPREventCollectorInMemoryLarge">
                     <EventProviders Operation="Add">
-                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks" />
+                        <EventProviderId Value="EventProvider_AM_Engine_With_Stacks_EndRundown" />
                         <EventProviderId Value="EventProvider_AM_Service" />
                         <EventProviderId Value="EventProvider_AM_RTP" />
                         <EventProviderId Value="EventProvider_AM_Filter_With_Stacks" />
@@ -274,6 +328,10 @@
 
                         <!-- SMB -->
                         <EventProviderId Value="EventProvider_Microsoft_Windows_SMBClient" />
+
+                        <!-- Microsoft-Antimalware-Engine-DynamicSymbols & Microsoft-Antimalware-Engine-DynamicSymbolsRundown -->
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbols" />
+                        <EventProviderId Value="EventProvider_Microsoft-Antimalware-Engine-DynamicSymbolsRundown_CaptureState_EndRundown" />
                     </EventProviders>
                 </EventCollectorId>
             </Collectors>
